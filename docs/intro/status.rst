@@ -89,7 +89,7 @@ Other feature notes:
 
   - Vivado HLS 2020.1. Older versions may work, but use at your own risk.
   - Intel HLS versions 20.1 to 21.4, versions > 21.4 have not been tested.
-  - Vitis HLS versions 2022.2 to 2024.1. Versions > 2024.1 are less tested.
+  - Vitis HLS versions ≤ 2022.2 (via ``vitis_hls``) and 2023.1 to 2024.1 (via ``vitis-run``). Versions > 2024.1 are less tested.
   - Catapult HLS versions 2024.1_1 to 2024.2
   - oneAPI versions 2024.1 to 2025.0. Any future versions are known to not work.
 
