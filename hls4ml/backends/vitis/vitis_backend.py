@@ -119,9 +119,17 @@ class VitisBackend(VivadoBackend):
         log_to_stdout=True,
     ):
         if 'linux' in sys.platform:
-            found_vrun = os.system('command -v vitis-run > /dev/null') == 0
-            if not found_vrun:
-                raise Exception('Vitis installation not found. Make sure "vitis-run" is on PATH.')
+            if shutil.which('vitis-run'):
+                build_command = 'vitis-run --tcl build_prj.tcl --mode hls'
+            elif shutil.which('vitis_hls'):
+                build_command = 'vitis_hls -f build_prj.tcl'
+            else:
+                raise Exception(
+                    'Vitis installation not found. Make sure "vitis-run" (Vitis ≥ 2023.1) '
+                    'or "vitis_hls" (Vitis ≤ 2022.2) is on PATH.'
+                )
+        else:
+            build_command = 'vitis-run --tcl build_prj.tcl --mode hls'
 
         build_opts = (
             'array set opt {\n'
@@ -139,8 +147,6 @@ class VitisBackend(VivadoBackend):
         tcl_path = Path(model.config.get_output_dir()) / 'build_opt.tcl'
         with open(tcl_path, 'w') as file:
             file.write(build_opts)
-
-        build_command = 'vitis-run --tcl build_prj.tcl --mode hls'
 
         output_dir = model.config.get_output_dir()
         stdout_log = os.path.join(output_dir, 'build_stdout.log')
